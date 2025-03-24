@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template
 import requests
 import sqlite3
 
@@ -9,11 +9,9 @@ ODL_URL = 'http://13.201.79.70:8181/restconf/operational/network-topology:networ
 ODL_USERNAME = 'admin'
 ODL_PASSWORD = 'admin'
 
-# Database setup
 DB_NAME = "hosts.db"
 
 def init_db():
-    """Initialize SQLite database and create table if it doesn't exist."""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS hosts (
@@ -25,7 +23,6 @@ def init_db():
     conn.close()
 
 def save_to_db(mac, ip):
-    """Save host information to the database."""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("INSERT OR IGNORE INTO hosts (mac, ip) VALUES (?, ?)", (mac, ip))
@@ -33,7 +30,6 @@ def save_to_db(mac, ip):
     conn.close()
 
 def fetch_hosts_from_odl():
-    """Fetch host IP and MAC from OpenDaylight."""
     response = requests.get(ODL_URL, auth=(ODL_USERNAME, ODL_PASSWORD))
 
     if response.status_code == 200:
@@ -62,7 +58,6 @@ def hosts():
 
 @app.route('/analytics')
 def analytics():
-    """Show number of unique hosts in database."""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("SELECT COUNT(DISTINCT mac) FROM hosts")
