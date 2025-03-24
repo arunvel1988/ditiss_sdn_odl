@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Host Info</title>
+</head>
+<body>
+    <h1>Host MAC and IP Information</h1>
+    <table border="1">
+        <tr>
+            <th>MAC Address</th>
+            <th>IP Address</th>
+        </tr>
+        {% for host in hosts %}
+        <tr>
+            <td>{{ host.mac }}</td>
+            <td>{{ host.ip }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/">Go Back</a>
+</body>
+</html>
